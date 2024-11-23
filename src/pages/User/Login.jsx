@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi"; // Iconos de correo y candado
-import logo from "../assets/logo.png"; // Importa el logo principal
-import googleLogo from "../assets/google-logo.png"; // Importa el logo de Google
+import logo from "../../assets/logo.png"; // Logo principal
+import googleLogo from "../../assets/google-logo.png"; // Importa el logo de Google
 
 const Login = () => {
   // Estados para los campos y errores

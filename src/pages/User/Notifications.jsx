@@ -6,7 +6,7 @@ import {
     HiOutlineUser,
     HiOutlineUserCircle,
 } from "react-icons/hi";
-import logo from "../assets/logo.png"; // Logo principal
+import logo from "../../assets/logo.png"; // Logo principal
 
 const Notifications = () => {
     const [notifications] = useState([

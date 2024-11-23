@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from "react-icons/hi"; // Iconos
-import logo from "../assets/logo.png";
-import googleLogo from "../assets/google-logo.png";
+import logo from "../../assets/logo.png";
+import googleLogo from "../../assets/google-logo.png";
 
 const Register = () => {
   const [email, setEmail] = useState("");
