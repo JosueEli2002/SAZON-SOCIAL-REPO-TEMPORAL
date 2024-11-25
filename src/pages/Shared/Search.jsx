@@ -8,10 +8,15 @@ import {
   HiOutlineBell,
   HiOutlineUser,
 } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import recipeImage from "../../assets/recipe-placeholder.jpg";
 import logo from "../../assets/logo.png";
 
 const SearchPage = () => {
+  const navigate = useNavigate();
+  const [lastView, setLastView] = useState("userFeed"); // Simula la última vista
+  const [likedRecipes, setLikedRecipes] = useState({});
+  const [savedRecipes, setSavedRecipes] = useState({});
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     timeOfMeal: [],
@@ -38,6 +43,20 @@ const SearchPage = () => {
     },
   ]);
 
+  const toggleLike = (id) => {
+    setLikedRecipes((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const toggleSave = (id) => {
+    setSavedRecipes((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
   const toggleFilter = (category, value) => {
     setFilters((prevFilters) => {
       const updatedCategory = prevFilters[category].includes(value)
@@ -55,10 +74,26 @@ const SearchPage = () => {
         <div className="flex flex-col items-center md:hidden w-full">
           <img src={logo} alt="Sazón Social Logo" className="w-16 h-16 mb-2" />
           <div className="flex justify-between w-full px-4">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() =>
+                lastView === "userFeed"
+                  ? navigate("/feed")
+                  : navigate("/admin/feed")
+              }
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
         <div className="hidden md:flex items-center justify-between w-full">
@@ -66,11 +101,27 @@ const SearchPage = () => {
             <h1 className="text-black text-[24px] font-bold">Sazón Social</h1>
             <img src={logo} alt="Sazón Social Logo" className="w-16 h-16" />
           </div>
-          <div className="flex space-x-10">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+          <div className="flex space-x-20">
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() =>
+                lastView === "userFeed"
+                  ? navigate("/feed")
+                  : navigate("/admin/feed")
+              }
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
       </header>
@@ -80,7 +131,7 @@ const SearchPage = () => {
         <div className="max-w-[750px] mx-auto">
           {/* Barra de búsqueda */}
           <div className="space-y-4 md:space-y-0 md:flex md:items-center md:space-x-4 mb-4">
-           <div className="flex items-center w-full bg-white border rounded-lg p-3"> 
+            <div className="flex items-center w-full bg-white border rounded-lg p-3">
               <input
                 type="text"
                 placeholder="Buscar recetas..."
@@ -113,24 +164,49 @@ const SearchPage = () => {
                 />
                 <div className="p-4">
                   <h2 className="text-black text-lg font-bold">{recipe.title}</h2>
-                  <p className="text-gray-600 text-sm mb-2">por: {recipe.author}</p>
+                  <p className="text-gray-600 text-sm mb-2">
+                    por: {recipe.author}
+                  </p>
                   <p className="text-gray-700 text-sm">{recipe.description}</p>
                   <p className="text-gray-500 text-xs">
                     Etiquetas: {recipe.tags.join(", ")}
                   </p>
                 </div>
                 <div className="p-4 flex justify-between items-center border-t">
-                  <button className="flex items-center space-x-2 text-gray-500">
+                  <button
+                    className={`flex items-center space-x-2 ${
+                      likedRecipes[recipe.id] ? "text-red-500" : "text-gray-500"
+                    }`}
+                    onClick={() => toggleLike(recipe.id)}
+                  >
                     <HiOutlineHeart className="text-lg" />
-                    <span className="text-sm">Me gusta</span>
+                    <span className="text-sm">
+                      {likedRecipes[recipe.id] ? "Te gusta" : "Me gusta"}
+                    </span>
                   </button>
-                  <button className="flex items-center space-x-2 text-gray-500">
-                    <HiOutlineChat className="text-lg" />
+                  <button
+                    className="flex items-center space-x-2"
+                    onClick={() =>
+                      lastView === "userFeed"
+                        ? navigate("/comments")
+                        : navigate("/admin/comments")
+                    }
+                  >
+                    <HiOutlineChat className="text-gray-500 text-lg" />
                     <span className="text-sm">Comentar</span>
                   </button>
-                  <button className="flex items-center space-x-2 text-gray-500">
+                  <button
+                    className={`flex items-center space-x-2 ${
+                      savedRecipes[recipe.id]
+                        ? "text-orange-500"
+                        : "text-gray-500"
+                    }`}
+                    onClick={() => toggleSave(recipe.id)}
+                  >
                     <HiOutlineBookmark className="text-lg" />
-                    <span className="text-sm">Guardar</span>
+                    <span className="text-sm">
+                      {savedRecipes[recipe.id] ? "Guardado" : "Guardar"}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -217,7 +293,9 @@ const SearchPage = () => {
               </div>
 
               {/* Campo personalizado */}
-              <h3 className="font-bold text-black mt-4 mb-2">Filtro personalizado</h3>
+              <h3 className="font-bold text-black mt-4 mb-2">
+                Filtro personalizado
+              </h3>
               <input
                 type="text"
                 value={customFilter}

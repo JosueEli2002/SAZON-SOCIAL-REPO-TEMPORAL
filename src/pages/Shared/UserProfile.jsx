@@ -9,15 +9,20 @@ import {
   HiOutlineBell,
   HiOutlineUser,
 } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import profilePlaceholder from "../../assets/profile-placeholder.png"; // Foto de perfil por defecto
 import recipePlaceholder from "../../assets/recipe-placeholder.jpg"; // Foto de receta por defecto
 import logo from "../../assets/logo.png"; // Logo de la aplicación
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+  const [lastView, setLastView] = useState("userFeed"); // Simula la última vista
   const [section, setSection] = useState("misRecetas"); // Sección activa
   const [username, setUsername] = useState("Jason II");
   const [newName, setNewName] = useState(""); // Cambio de nombre
   const [profilePic, setProfilePic] = useState(profilePlaceholder);
+  const [likedRecipes, setLikedRecipes] = useState({});
+  const [savedRecipesState, setSavedRecipesState] = useState({});
 
   const [userRecipes, setUserRecipes] = useState([
     { id: 1, image: recipePlaceholder, title: "Paella casera", description: "Un clásico de comfort food", tags: ["cocina casera", "fácil", "almuerzo"] },
@@ -51,6 +56,20 @@ const ProfilePage = () => {
     alert("La receta fue eliminada.");
   };
 
+  const toggleLike = (id) => {
+    setLikedRecipes((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const toggleSave = (id) => {
+    setSavedRecipesState((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
   const renderRecipes = (recipes, isSaved) =>
     recipes.map((recipe) => (
       <div key={recipe.id} className="bg-white rounded-lg shadow-lg mb-6 overflow-hidden w-full md:w-[700px] lg:w-[700px] mx-auto">
@@ -61,17 +80,30 @@ const ProfilePage = () => {
           <p className="text-gray-500 text-xs">Etiquetas: {recipe.tags.join(", ")}</p>
         </div>
         <div className="p-4 flex justify-between items-center border-t">
-          <button className="flex items-center space-x-2 text-gray-500">
+          <button
+            className={`flex items-center space-x-2 ${likedRecipes[recipe.id] ? "text-red-500" : "text-gray-500"}`}
+            onClick={() => toggleLike(recipe.id)}
+          >
             <HiOutlineHeart className="text-lg" />
-            <span className="text-sm">Me gusta</span>
+            <span className="text-sm">{likedRecipes[recipe.id] ? "Te gusta" : "Me gusta"}</span>
           </button>
-          <button className="flex items-center space-x-2 text-gray-500">
+          <button
+            className="flex items-center space-x-2 text-gray-500"
+            onClick={() =>
+              lastView === "userFeed"
+                ? navigate("/comments")
+                : navigate("/admin/comments")
+            }
+          >
             <HiOutlineChat className="text-lg" />
             <span className="text-sm">Comentar</span>
           </button>
-          <button className="flex items-center space-x-2 text-gray-500">
+          <button
+            className={`flex items-center space-x-2 ${savedRecipesState[recipe.id] ? "text-orange-500" : "text-gray-500"}`}
+            onClick={() => toggleSave(recipe.id)}
+          >
             <HiOutlineBookmark className="text-lg" />
-            <span className="text-sm">Guardar</span>
+            <span className="text-sm">{savedRecipesState[recipe.id] ? "Guardado" : "Guardar"}</span>
           </button>
           <button
             className="flex items-center space-x-2 text-gray-500"
@@ -93,19 +125,51 @@ const ProfilePage = () => {
             <h1 className="text-black text-[24px] font-bold hidden md:block">Sazón Social</h1>
             <img src={logo} alt="Sazón Social Logo" className="w-16 h-16" />
           </div>
-          <div className="hidden md:flex space-x-6">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+          <div className="hidden md:flex space-x-20">
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() =>
+                lastView === "userFeed"
+                  ? navigate("/feed")
+                  : navigate("/admin/feed")
+              }
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
         {/* Diseño móvil */}
         <div className="flex md:hidden justify-between items-center w-full mt-4">
-          <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-          <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-          <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-          <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+          <HiOutlineHome
+            className="text-black text-2xl cursor-pointer"
+            onClick={() =>
+              lastView === "userFeed"
+                ? navigate("/feed")
+                : navigate("/admin/feed")
+            }
+          />
+          <HiOutlineSearch
+            className="text-black text-2xl cursor-pointer"
+            onClick={() => navigate("/search")}
+          />
+          <HiOutlineBell
+            className="text-black text-2xl cursor-pointer"
+            onClick={() => navigate("/notifications")}
+          />
+          <HiOutlineUser
+            className="text-black text-2xl cursor-pointer"
+            onClick={() => navigate("/profile")}
+          />
         </div>
       </header>
 

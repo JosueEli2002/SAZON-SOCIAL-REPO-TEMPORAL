@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { HiOutlineUserCircle, HiOutlineTrash, HiOutlineHome, HiOutlineSearch, HiOutlineBell, HiOutlineUser } from "react-icons/hi";
+import {
+  HiOutlineUserCircle,
+  HiOutlineTrash,
+  HiOutlineHome,
+  HiOutlineSearch,
+  HiOutlineBell,
+  HiOutlineUser,
+} from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png"; // Logo principal
 
 const AdminComments = () => {
+  const navigate = useNavigate();
   const [comments, setComments] = useState([
     { id: 1, user: "Juan", comment: "¡Excelente receta, gracias por compartir!" },
     { id: 2, user: "Estefanía", comment: "¿Qué ingredientes puedo sustituir?" },
@@ -11,55 +20,80 @@ const AdminComments = () => {
   const [newComment, setNewComment] = useState("");
   const maxChars = 100;
 
-  // Función para eliminar un comentario
   const handleDeleteComment = (id) => {
     const updatedComments = comments.filter((comment) => comment.id !== id);
     setComments(updatedComments);
   };
 
-  // Función para añadir un comentario
   const handleAddComment = () => {
     if (newComment.trim()) {
-      const newId = comments.length > 0 ? comments[comments.length - 1].id + 1 : 1;
+      const newId =
+        comments.length > 0 ? comments[comments.length - 1].id + 1 : 1;
       const newCommentObj = { id: newId, user: "Admin", comment: newComment.trim() };
       setComments([...comments, newCommentObj]);
-      setNewComment(""); // Limpiar el campo de texto
+      setNewComment("");
     }
   };
 
   return (
     <div className="min-h-screen bg-[#F5F5DC] font-['Roboto']">
       {/* Encabezado */}
-      <header className="bg-[#FFB74D] p-4 flex items-center justify-between fixed top-0 w-full z-20 shadow-md">
+      <header className="bg-[#FFB74D] p-4 fixed top-0 w-full z-20 shadow-md">
         {/* Diseño móvil */}
-        <div className="flex flex-col items-center md:hidden w-full">
+        <div className="md:hidden flex flex-col items-center">
           <img src={logo} alt="Sazón Social Logo" className="w-16 h-16 mb-2" />
-          <div className="flex justify-between w-full px-4">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+          <div className="flex justify-between w-full px-8">
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/admin/feed")}
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
         {/* Diseño escritorio */}
-        <div className="hidden md:flex items-center justify-between w-full">
+        <div className="hidden md:flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <h1 className="text-black text-[24px] font-bold">Sazón Social</h1>
             <img src={logo} alt="Sazón Social Logo" className="w-16 h-16" />
           </div>
           <div className="flex space-x-20">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/admin/feed")}
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
       </header>
 
       {/* Contenido principal */}
-      <main className="pt-28 px-4">
+      <main className="pt-36 md:pt-28 px-4">
         <div className="bg-white rounded-lg shadow-md p-4 max-w-[750px] mx-auto">
-          <h2 className="text-black text-2xl font-bold text-center mb-4">Comentarios</h2>
+          <h2 className="text-black text-2xl font-bold text-center mb-4">
+            Comentarios
+          </h2>
 
           {/* Lista de comentarios */}
           <div className="space-y-4">

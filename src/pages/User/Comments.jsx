@@ -6,9 +6,11 @@ import {
   HiOutlineUser,
   HiOutlineUserCircle,
 } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png"; // Logo principal
 
 const Comments = () => {
+  const navigate = useNavigate();
   const [comments, setComments] = useState([
     { id: 1, user: "Juan", comment: "Te quedó excelente" },
     { id: 2, user: "Estefanía", comment: "Bastante bueno" },
@@ -47,20 +49,44 @@ const Comments = () => {
             <img src={logo} alt="Sazón Social Logo" className="w-16 h-16" />
           </div>
           <div className="flex space-x-28">
-            <HiOutlineHome className="text-black text-2xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-2xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-2xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-2xl cursor-pointer" />
+            <HiOutlineHome
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/feed")}
+            />
+            <HiOutlineSearch
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-2xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
         {/* Diseño móvil */}
         <div className="md:hidden flex flex-col items-center w-full">
           <img src={logo} alt="Sazón Social Logo" className="w-16 h-16 mb-3" />
           <div className="flex justify-between w-full px-8 space-x-16">
-            <HiOutlineHome className="text-black text-xl cursor-pointer" />
-            <HiOutlineSearch className="text-black text-xl cursor-pointer" />
-            <HiOutlineBell className="text-black text-xl cursor-pointer" />
-            <HiOutlineUser className="text-black text-xl cursor-pointer" />
+            <HiOutlineHome
+              className="text-black text-xl cursor-pointer"
+              onClick={() => navigate("/feed")}
+            />
+            <HiOutlineSearch
+              className="text-black text-xl cursor-pointer"
+              onClick={() => navigate("/search")}
+            />
+            <HiOutlineBell
+              className="text-black text-xl cursor-pointer"
+              onClick={() => navigate("/notifications")}
+            />
+            <HiOutlineUser
+              className="text-black text-xl cursor-pointer"
+              onClick={() => navigate("/profile")}
+            />
           </div>
         </div>
       </header>
